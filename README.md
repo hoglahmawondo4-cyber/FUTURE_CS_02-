@@ -1,44 +1,50 @@
-## 1. Phishing Detection & Awareness Report (Template)
-Project Name: Phishing Email Detection & Awareness System
-Track: Cyber Security (CS)
-Task Number: 02
-## Executive Summary
-This report analyses (Number) email samples to identify potential phishing threats. By examining sender metadata, link structures, and content tone, we classify these emails to help users protect sensitive company data.
-## Technical Analysis & Findings
+# 🎣 Task 2: Phishing Detection & Awareness Report
 
-| Email Sample | Classification | Key Indicators Observed | Risk Level |
-|---|---|---|---|
-| Sample 01 | Phishing | Spoofed domain (micr0soft.com), urgent tone, hidden URL. | High |
-| Sample 02 | Safe | Verified sender, no external links, expected communication. | Low |
-| Sample 03 | Suspicious | Unusual "From" address, but no malicious payload found. | Medium |
+**Prepared by:** [HOGLAH MAWONDO]  
+**Internship Track:** Cyber Security (Future Interns)  
+**Task ID:** FUTURE_CS_02  
 
-## Prevention & Awareness Guidelines
+---
 
-   1. Check the 'From' Field: Always verify the actual email address, not just the display name.
-   2. Inspect Links: Hover over buttons to see the real destination URL.
-   3. Think Before You Click: Be wary of emails creating a false sense of urgency or fear.
+## 1. Executive Summary
+This project demonstrates the methodology for identifying and analyzing phishing attempts. By evaluating three distinct email samples, I have identified key "Red Flags" used by adversaries, such as **punycode domains**, **sender spoofing**, and **social engineering** tactics. This report serves as a baseline for organizational security awareness.
 
-------------------------------
-## 2. Header Analysis Script (Python)
-You can include this script in your FUTURE_CS_02 repository to show how you programmatically extract technical data from .eml files or header text.
+---
 
-import emailfrom email import policy
-def analyze_email_header(file_path):
-    with open(file_path, 'rb') as f:
-        msg = email.message_from_binary_file(f, policy=policy.default)
-    
-    print(f"--- Analysis for: {file_path} ---")
-    print(f"Subject: {msg['subject']}")
-    print(f"From: {msg['from']}")
-    print(f"Return-Path: {msg['Return-Path']}")
-    print(f"Received (Last Hop): {msg['Received']}")
-    
-    # Simple check for common phishing keywords in subject
-    phishing_keywords = ['urgent', 'suspended', 'verify', 'action required', 'login']
-    subject_lower = msg['subject'].lower()
-    
-    if any(keyword in subject_lower for keyword in phishing_keywords):
-        print("ALERT: High-risk keywords detected in Subject line.")
-    else:
-        print("Status: No immediate keyword triggers found.")
-# Usage: analyze_email_header('your_sample_email.eml')
+## 2. Technical Analysis & Findings
+
+
+| Email Sample | Classification | Technical Red Flags Observed | Risk Level |
+| :--- | :--- | :--- | :--- |
+| **Sample 01: O365 Alert** | 🔴 Phishing | Punycode domain (`micr0soft.com`), Hidden URL redirecting to a credential harvester. | **CRITICAL** |
+| **Sample 02: HR Internal** | 🟢 Safe | Validated DKIM/SPF signatures, internal IP origin, expected payroll communication. | **LOW** |
+| **Sample 03: DHL Tracking** | 🟠 Suspicious | Display Name Spoofing; 'From' address does not match DHL domain. No active payload detected. | **MEDIUM** |
+
+---
+
+## 3. 🔍 Deep Dive: Phishing Indicators
+In my analysis of **Sample 01**, the following indicators were flagged:
+1.  **Sender Deception:** The "From" field showed `Microsoft Security`, but the actual header revealed `support@secure-login-392.top`.
+2.  **Social Engineering:** Used an "Urgent Account Suspension" theme to bypass the user's critical thinking.
+3.  **URL Masking:** The "Verify Now" button link was masked using a URL shortener (`bit.ly/xxxx`) to hide the final malicious destination.
+
+---
+
+## 4. 🐍 Automation: Email Header Analyzer
+I developed a Python-based utility to automate the extraction of metadata from `.eml` files. This script checks for high-risk keywords and extracts the `Return-Path` to verify sender authenticity.
+
+### Script Capabilities:
+*   **Metadata Extraction:** Pulls Subject, From, and Return-Path.
+*   **Heuristic Analysis:** Scans for high-pressure keywords (e.g., *Urgent*, *Suspended*).
+*   **Security Validation:** Compares the 'From' field against the 'Return-Path'.
+
+*(Note: The full source code is available in `header_analyzer.py` in this repository.)*
+
+---
+
+## 5. ✅ Prevention & Awareness Guidelines
+To protect the organization, users should follow the **"S.T.O.P"** framework:
+*   **S**crutinize the Sender: Check the actual email address, not just the name.
+*   **T**hink Before Clicking: Hover over links to verify the destination URL.
+*   **O**bserve the Tone: Be wary of extreme urgency or threats of account closure.
+*   **P**ause and Report: If it looks suspicious, use the "Report Phishing" button immediately.
